@@ -1,0 +1,25 @@
+@font-face {
+  font-family: 'CeraRoundProMedium';
+  src: local('CeraRoundProMedium'), url(./fonts/CeraRoundProMedium.otf) format('truetype')
+}
+
+@font-face {
+  font-family: 'CeraRoundProLight';
+  src: local('CeraRoundProLight'), url(./fonts/CeraRoundProLight.otf) format('truetype')
+}
+
+body {
+  margin: 0;
+  font-family: CeraRoundProMedium, serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.navbar-custom {
+    background-color: #183153;
+}

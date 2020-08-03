@@ -1,0 +1,60 @@
+version: '3.7'
+services:
+  client:
+    build:
+      context: ./http/web/client
+      dockerfile: Dockerfile-prod
+    tty: true
+    ports:
+      - "3000:80"
+    volumes:
+      - ./http/web/client:/client
+      - /client/node_modules
+    networks:
+      - frontend
+  mongo:
+    image: mongo
+    container_name: mongo
+    restart: unless-stopped
+    command: mongod --auth
+    environment:
+      MONGODB_DATABASE: geomap
+      MONGODB_USERNAME: nk92
+      MONGODB_PASSWORD: luneczka
+      MONGODB_HOSTNAME: mongodb
+    volumes:
+      - mongodbdata:/data/db
+    networks:
+      - backend
+    ports:
+      - "27017:27017"
+  api:
+    build:
+      context: http/app
+      dockerfile: http/app/Dockerfile.api
+    command: gunicorn --bind 0.0.0.0:5000 app:app
+    ports:
+      - "5000:5000"
+    environment:
+      MONGODB_DATABASE: geomap
+      MONGODB_USERNAME: nk92
+      MONGODB_PASSWORD: luneczka
+      MONGODB_HOSTNAME: mongodb
+    depends_on:
+      - mongo
+    volumes:
+      - appdata:/var/www/
+      - ./http/app:/app
+    networks:
+      - frontend
+      - backend
+networks:
+    frontend:
+      driver: bridge
+    backend:
+      driver: bridge
+volumes:
+    mongodbdata:
+        driver: local
+    appdata:
+        driver: local
